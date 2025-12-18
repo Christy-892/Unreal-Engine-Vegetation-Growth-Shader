@@ -11,25 +11,25 @@ Following this early test, I transitioned to a more structured pipeline to suppo
 ## Features
 ### Asset - Tree Asset Generation
 The tree assets were created in Houdini using SideFX Labs Tree Toolset:
-<img width="2210" height="862" alt="image" src="https://github.com/user-attachments/assets/c9cf5c6a-bbc7-4203-84ed-380152975a18" />
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/c9cf5c6a-bbc7-4203-84ed-380152975a18" />
 
 ### Asset - Tree Asset Vertex Color 
 The tree assets vertex color which drives the Vegetation Growth shader was then calculated based on branch position and length:
-<img width="1081" height="927" alt="image" src="https://github.com/user-attachments/assets/fc68f627-16bb-4dd6-bbe4-5f2b04192bb7" />
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/fc68f627-16bb-4dd6-bbe4-5f2b04192bb7" />
 
-### Shader - Shader Parameters
+### Shader
 The parameters of the shader:
-<img width="1160" height="703" alt="image" src="https://github.com/user-attachments/assets/ef76af05-1023-4bb1-992a-8a9766d986d2" />
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/ef76af05-1023-4bb1-992a-8a9766d986d2" />
 
 ## Deep Dive
 ### Asset - Tree Asset Generation
-In order to quickly and efficiently generate multiple tree variants, a TOPs workflow was implemented where an <b>Attribute Name</b> was set and then used in the trunk/branches nodes to randomize each nodes output:
-<img width="1457" height="661" alt="image" src="https://github.com/user-attachments/assets/47be46a7-8092-4f2c-b82c-0005aa625282" />
-<img width="1268" height="732" alt="image" src="https://github.com/user-attachments/assets/61f44ce5-543d-4371-91fd-5ed332f76987" />
+In order to quickly and efficiently generate multiple tree variants, a TOPs workflow was implemented where an <b>Attribute Name</b> was set and then used in the trunk/branches nodes to randomize each nodes output:<br>
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/47be46a7-8092-4f2c-b82c-0005aa625282" />
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/61f44ce5-543d-4371-91fd-5ed332f76987" />
 
 ### Asset - Tree Asset Vertex Color
 The vertex color is calculated based on the tree's branch positions and length. Looping through each "level" of branches, the vertex color of the previous iteration (branch level) feeds into the vertex color of the current branch level. This is first generated on the curves of the tree before being transferred to the mesh:
-<img width="2049" height="1091" alt="image" src="https://github.com/user-attachments/assets/4fc35c36-5a07-4548-a0e6-e8beb2516652" />
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/4fc35c36-5a07-4548-a0e6-e8beb2516652" />
 
 Main VEX snippet (prims):
 ```c
@@ -76,12 +76,28 @@ foreach(int pt; prim_pts)
     setpointattrib(0, "vertex_color", pt, vertex_color, "set");
 }
 ```
+### Shader
+The Opacity Mask supports two methods: Time-Based and Camera-Based. Based on the selected method, the mask is multiplied with the vertex red channel:<br>
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/53818146-aea7-4768-994a-65e2fa944f61" />
+
+The UV2 channel is used for the leaf mask:<br>
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/72f7a4ee-62b3-4af9-a697-316241faade5" />
+
+A transitional glow is appliedl, which can be overridden by the user:<br>
+<img width="1200" height="600" alt="image" src="https://github.com/user-attachments/assets/d0dafe1a-c449-4717-a195-af5baea7c987" />
+
 
 ## Setup
 >[!NOTE]
 > - Unreal Engine version - 5.7.0
 > - Houdini version - 21.0.440
 
+### Unreal Engine
+1. Download Textures, Materials and Props from this repository and copy them via windows explorer into the relevant folders of your Unreal Engine project
+### Houdini
+1. Download TreeGeneration HIP file
+2. Open in Houdini 
+ 
 ## Resources
 - Tutorial for SideFX Labs Tree Toolset - https://www.sidefx.com/tutorials/tree-generator/
 - Artstation Portfolio Piece - https://www.artstation.com/artwork/DLyLwE
@@ -91,4 +107,4 @@ foreach(int pt; prim_pts)
 - [x] Feature - Create multiple types of trees, all with multiple variants
 - [x] Feature - Use TOPs to efficiently generate the multiple variants of trees
 - [ ] Feature - Expose and improve hidden "Time Based" growth option
-- [ ] Debug Animation in Houdini with Curves
+- [ ] Feature - Debug Animation in Houdini with Curves
